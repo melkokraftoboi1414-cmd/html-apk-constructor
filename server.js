@@ -7,7 +7,7 @@ const app = express();
 const PORT = Number(process.env.PORT || 3000);
 const JOBS = new Map();
 
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '20mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 function createSampleJob() {
@@ -25,6 +25,7 @@ app.get('/api/health', (req, res) => {
   res.json({ ok: true, status: 'healthy' });
 });
 
+// Build endpoint: accepts { html }
 app.post('/api/build', (req, res) => {
   const html = String(req.body?.html || '').trim();
   if (!html) {
@@ -34,6 +35,12 @@ app.post('/api/build', (req, res) => {
   const job = createSampleJob();
   job.logs.push('Received HTML content. Build has been accepted.');
   JOBS.set(job.id, job);
+
+  // Save input HTML for worker to pick up
+  const inputDir = path.join(__dirname, 'builder', 'input');
+  if (!fs.existsSync(inputDir)) fs.mkdirSync(inputDir, { recursive: true });
+  fs.writeFileSync(path.join(inputDir, 'index.html'), html, 'utf8');
+  job.logs.push('Saved input HTML to builder/input/index.html');
 
   // Simulate a quick build process for demo purposes.
   setTimeout(() => {
@@ -62,6 +69,19 @@ app.post('/api/build', (req, res) => {
       artifactUrl: job.artifactUrl
     }
   });
+});
+
+// Patch upload endpoint: accepts { html }
+app.post('/api/patch', (req, res) => {
+  const html = String(req.body?.html || '').trim();
+  if (!html) return res.status(400).json({ error: 'HTML content is required.' });
+
+  const patchesDir = path.join(__dirname, 'public', 'patches', 'latest');
+  fs.mkdirSync(patchesDir, { recursive: true });
+  const patchPath = path.join(patchesDir, 'index.html');
+  fs.writeFileSync(patchPath, html, 'utf8');
+
+  res.json({ ok: true, url: `/patches/latest/index.html` });
 });
 
 app.get('/api/jobs/:id', (req, res) => {
