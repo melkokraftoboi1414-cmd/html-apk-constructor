@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+WORKDIR="${1:-/workspace}"
+OUTPUT_DIR="${WORKDIR}/outputs"
+mkdir -p "$OUTPUT_DIR"
+
+cat > "$WORKDIR/README.txt" <<'EOF'
+This folder is prepared for an Android WebView template build.
+
+Prerequisites:
+- Android SDK installed and ANDROID_HOME configured
+- Java 17 installed
+- Gradle available in PATH or use the local wrapper if added later
+
+This scaffold is a starting point for packaging HTML/JS/CSS into an Android app.
+EOF
+
+cat > "$WORKDIR/gradle.properties" <<'EOF'
+org.gradle.jvmargs=-Xmx1536m
+EOF
+
+mkdir -p "$WORKDIR/AndroidWebViewTemplate/app/src/main/java/com/example/webviewapp" \
+         "$WORKDIR/AndroidWebViewTemplate/app/src/main/assets" \
+         "$WORKDIR/AndroidWebViewTemplate/app/src/main/res/values"
+
+cat > "$WORKDIR/AndroidWebViewTemplate/settings.gradle" <<'EOF'
+rootProject.name = 'WebViewApp'
+include ':app'
+EOF
+
+cat > "$WORKDIR/AndroidWebViewTemplate/build.gradle" <<'EOF'
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.0'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+EOF
+
+cat > "$WORKDIR/AndroidWebViewTemplate/app/build.gradle" <<'EOF'
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdk 33
+    defaultConfig {
+        applicationId 'com.example.webviewapp'
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName '1.0'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+}
+EOF
+
+cat > "$WORKDIR/AndroidWebViewTemplate/app/src/main/AndroidManifest.xml" <<'EOF'
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.webviewapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:label="WebViewApp"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+EOF
+
+cat > "$WORKDIR/AndroidWebViewTemplate/app/src/main/java/com/example/webviewapp/MainActivity.java" <<'EOF'
+package com.example.webviewapp;
+
+import android.os.Bundle;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        WebView webView = new WebView(this);
+        setContentView(webView);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl("file:///android_asset/index.html");
+    }
+}
+EOF
+
+cat > "$WORKDIR/AndroidWebViewTemplate/app/src/main/res/values/strings.xml" <<'EOF'
+<resources>
+    <string name="app_name">WebViewApp</string>
+</resources>
+EOF
+
+cat > "$WORKDIR/AndroidWebViewTemplate/app/src/main/assets/index.html" <<'EOF'
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>WebView App</title>
+    <style>
+      body { font-family: system-ui, sans-serif; padding: 20px; }
+    </style>
+  </head>
+  <body>
+    <h1>Hello from Android WebView</h1>
+    <p>Replace this file with your generated HTML.</p>
+  </body>
+</html>
+EOF
+
+printf 'Android WebView template prepared at %s\n' "$WORKDIR/AndroidWebViewTemplate"
+printf 'Add Android SDK / Gradle and run a Gradle sync to build the APK.\n'
