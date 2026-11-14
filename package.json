@@ -2,7 +2,7 @@
   "name": "html-apk-constructor",
   "version": "1.1.0",
   "description": "Cross-platform HTML app constructor starter",
-  "main": "server.js",
+  "main": "electron/main.cjs",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
