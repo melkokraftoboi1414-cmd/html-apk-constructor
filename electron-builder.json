@@ -1,0 +1,8 @@
+{
+  "appId": "com.melkokraft.htmlconstructor",
+  "productName": "HTML App Constructor",
+  "directories": { "output": "dist" },
+  "files": ["public/**/*", "electron/**/*", "package.json"],
+  "win": { "target": ["nsis"] },
+  "mac": { "target": ["dmg"], "category": "public.app-category.developer-tools" }
+}
