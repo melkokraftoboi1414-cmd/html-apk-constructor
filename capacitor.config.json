@@ -1,0 +1,6 @@
+{
+  "appId": "com.melkokraft.htmlconstructor",
+  "appName": "HTML App Constructor",
+  "webDir": "www",
+  "server": { "androidScheme": "https" }
+}
