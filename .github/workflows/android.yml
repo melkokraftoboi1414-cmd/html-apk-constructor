@@ -1,6 +1,11 @@
 name: Android APK
 on:
   workflow_dispatch:
+    inputs:
+      html_base64:
+        description: "Constructor sahifasidan nusxalangan Base64 HTML (40 KB gacha)"
+        required: true
+        type: string
 jobs:
   build-android:
     runs-on: ubuntu-latest
@@ -13,8 +18,14 @@ jobs:
           node-version: 22
       - name: Install Capacitor Android toolchain
         run: npm install --no-save @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
-      - name: Prepare web assets
-        run: mkdir -p www && cp -R public/. www/
+      - name: Prepare uploaded HTML
+        env:
+          HTML_BASE64: ${{ inputs.html_base64 }}
+        run: |
+          mkdir -p www
+          printf '%s' "$HTML_BASE64" | base64 --decode > www/index.html
+          test -s www/index.html
+          grep -Eqi '<html|<!doctype' www/index.html
       - name: Add Android project
         run: npx cap add android
       - name: Sync Android project
