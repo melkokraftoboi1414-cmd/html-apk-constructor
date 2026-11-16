@@ -1,2 +1,49 @@
 <!doctype html>
-<html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10182b"><title>HTML App Constructor</title><style>*{box-sizing:border-box}body{margin:0;background:#0b1020;color:#edf3ff;font:15px system-ui,Arial}.wrap{max-width:850px;margin:auto;padding:28px 16px}.hero,.panel{background:#141f35;border:1px solid #2a3b5b;border-radius:18px;padding:22px;margin-bottom:16px}.tag{color:#8fded8;font-size:12px;letter-spacing:2px}h1{font-size:clamp(28px,6vw,42px);margin:8px 0}p{color:#aebbd0;line-height:1.6}.targets{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.target{padding:14px;border:1px solid #344765;border-radius:12px;background:#0d172a}.target b{display:block}.target small{color:#9aabc5}input[type=file]{width:100%;padding:14px;border:1px dashed #6682b1;border-radius:12px;background:#0d172a;color:white}button{margin-top:16px;padding:13px 18px;border:0;border-radius:11px;background:#5c8dff;color:white;font-weight:700}#result{margin-top:12px;padding:12px;background:#0d172a;border-radius:10px;color:#b9c9e4;font-size:13px}@media(max-width:540px){.targets{grid-template-columns:1fr}.hero,.panel{padding:17px}}</style></head><body><main class="wrap"><section class="hero"><div class="tag">ONE PROJECT · MULTIPLE PLATFORMS</div><h1>HTML App Constructor</h1><p>HTML o‘yin yoki ilovangizni Android, Windows, macOS va iOS uchun tayyorlash loyihasi. Bu boshlang‘ich interfeys; bulutli yig‘ish GitHub Actions orqali ulanadi.</p></section><section class="panel"><h2>1. HTML loyihani tanlang</h2><input id="file" type="file" accept=".html,.htm,.zip"><p id="fileInfo">Fayl tanlanmagan.</p><h2>2. Platformalar</h2><div class="targets"><label class="target"><input type="checkbox" checked> <b>Android APK</b><small>Android telefon va planshet</small></label><label class="target"><input type="checkbox" checked> <b>Windows EXE</b><small>Windows kompyuter</small></label><label class="target"><input type="checkbox" checked> <b>macOS DMG</b><small>Mac kompyuter</small></label><label class="target"><input type="checkbox" checked> <b>iOS IPA</b><small>Apple imzolash talab qilinadi</small></label></div><button id="check">Faylni tekshirish</button><div id="result">Bu forma hozircha faqat faylni tanlaydi; build serveriga yuklash keyingi bosqichda ulanadi.</div></section></main><script>const file=document.getElementById("file");file.addEventListener("change",()=>{const f=file.files[0];document.getElementById("fileInfo").textContent=f?f.name+" · "+(f.size/1024).toFixed(1)+" KB":"Fayl tanlanmagan."});document.getElementById("check").addEventListener("click",()=>{const f=file.files[0];document.getElementById("result").textContent=f?"Tanlangan fayl: "+f.name+". Fayl tanlandi, lekin serverga yuklanmadi.":"Avval HTML yoki ZIP faylni tanlang."});</script></body></html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10182b">
+<title>HTML App Constructor</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b1020;color:#edf3ff;font:15px system-ui,Arial}.wrap{max-width:850px;margin:auto;padding:22px 15px}.hero,.panel{background:#141f35;border:1px solid #2a3b5b;border-radius:18px;padding:20px;margin-bottom:15px}.tag{color:#8fded8;font-size:12px;letter-spacing:2px}h1{font-size:clamp(27px,6vw,40px);margin:8px 0}p,li{color:#b7c5da;line-height:1.55}input[type=file]{width:100%;padding:13px;border:1px dashed #6682b1;border-radius:12px;background:#0d172a;color:white}button{padding:13px 17px;border:0;border-radius:11px;background:#5c8dff;color:white;font-weight:700;margin:8px 6px 0 0}button:disabled{opacity:.45}textarea{width:100%;min-height:135px;margin-top:12px;padding:12px;background:#081222;color:#c8d8f2;border:1px solid #344765;border-radius:10px;font:12px ui-monospace,monospace;overflow-wrap:anywhere}#result{margin-top:12px;padding:13px;background:#0d172a;border-radius:10px;color:#b9c9e4;font-size:13px;white-space:pre-wrap}.step{padding:12px 0;border-bottom:1px solid #293a57}.step:last-child{border:0}.hint{font-size:13px;color:#9fb1cb}@media(max-width:540px){.hero,.panel{padding:16px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="hero"><div class="tag">ANDROID CLOUD BUILD · TEST</div><h1>HTML App Constructor</h1><p>HTML faylingizni tanlang, kodlangan matnni nusxalang va GitHub Actions orqali Android debug APK yig'ing.</p></section>
+<section class="panel">
+<h2>1. HTML faylni tanlang</h2>
+<input id="file" type="file" accept=".html,.htm,text/html">
+<p id="fileInfo" class="hint">Hozircha faqat bitta .html yoki .htm fayl. ZIP loyihalar keyingi bosqichda qo'shiladi.</p>
+<button id="encode">Faylni tayyorlash</button>
+<div id="result">Fayl tanlang va “Faylni tayyorlash” tugmasini bosing.</div>
+<textarea id="encoded" readonly placeholder="Kodlangan HTML shu yerda paydo bo'ladi..." aria-label="Kodlangan HTML"></textarea>
+<button id="copy" disabled>Kodni nusxalash</button>
+</section>
+<section class="panel">
+<h2>2. GitHub'da APK yig'ing</h2>
+<div class="step"><b>1)</b> <a href="https://github.com/melkokraftoboi1414-cmd/html-apk-constructor/actions" target="_blank" rel="noopener" style="color:#8fc5ff">GitHub Actions sahifasini oching</a>.</div>
+<div class="step"><b>2)</b> “Android APK” workflow'ni tanlang va “Run workflow” ni bosing.</div>
+<div class="step"><b>3)</b> “html_base64” maydoniga yuqoridagi nusxalangan kodni joylang.</div>
+<div class="step"><b>4)</b> Yashil “Run workflow” tugmasini bosing. Jarayon tugagach, run ichidagi Artifacts bo'limidan APK'ni yuklab oling.</div>
+<p class="hint">Eslatma: GitHub workflow_dispatch input hajmi cheklangan. Ushbu sinov uchun HTML fayl 40 KB dan kichik bo'lishi kerak. ZIP hozircha qo'llanmaydi. APK debug imzoli bo'ladi; Play Market uchun release signing keyin qo'shiladi.</p>
+</section>
+</main>
+<script>
+const fileInput=document.getElementById('file'),out=document.getElementById('encoded'),copy=document.getElementById('copy'),result=document.getElementById('result');
+fileInput.addEventListener('change',()=>{const f=fileInput.files[0];document.getElementById('fileInfo').textContent=f?f.name+' · '+(f.size/1024).toFixed(1)+' KB':'Fayl tanlanmagan.';out.value='';copy.disabled=true;});
+document.getElementById('encode').addEventListener('click',async()=>{
+ const f=fileInput.files[0]; if(!f){result.textContent='Avval HTML faylni tanlang.';return;}
+ if(!/\.html?$/i.test(f.name)){result.textContent='Faqat .html yoki .htm fayl tanlang. ZIP keyingi bosqichda.';return;}
+ if(f.size>40000){result.textContent='Fayl 40 KB dan katta. Hozircha GitHub workflow input chegarasi uchun kichikroq HTML tanlang.';return;}
+ try{
+  const bytes=new Uint8Array(await f.arrayBuffer());let binary='';
+  for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
+  out.value=btoa(binary);copy.disabled=false;
+  result.textContent='Tayyor! '+f.name+' fayli Base64 ko‘rinishiga aylantirildi ('+out.value.length+' belgi). Endi kodni nusxalang va GitHub Actions dagi html_base64 maydoniga joylang.';
+ }catch(e){result.textContent='Faylni tayyorlashda xatolik: '+e.message;}
+});
+copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(out.value);result.textContent='Kod nusxalandi. Endi GitHub Actions sahifasiga o‘ting.';}catch(e){out.focus();out.select();result.textContent='Matn belgilandi. Menyudan Copy/Nusxalash ni bosing.';}});
+</script>
+</body></html>
